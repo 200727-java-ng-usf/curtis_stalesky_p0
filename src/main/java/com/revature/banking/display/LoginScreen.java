@@ -36,10 +36,6 @@ public class LoginScreen extends Screen{
             System.out.print("Password: ");
             password = app.getConsole().readLine();
 
-            //AppUser authUser = userService.authenticate(username, password);
-            //System.out.println(authUser);
-            //System.out.println("Your entered: " + username + " / " + password);
-
             userServices.authenticate(username, password);
 
             if(app.isSessionValid())app.getRouter().navigate("/dashboard");

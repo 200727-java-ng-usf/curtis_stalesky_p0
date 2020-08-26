@@ -4,7 +4,10 @@ import com.revature.banking.exceptions.InvalidRequestException;
 import com.revature.banking.models.*;
 import com.revature.banking.repos.UserRepository;
 import com.revature.banking.models.Roles;
+import com.revature.banking.util.ConnectionFactory;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -100,6 +103,25 @@ public class UserServices {
         return true;
     }
 
+    // Method to
+    public void viewAccount(){
+
+        app.getCurrentUser();
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+
+            String sql = "SELECT * FROM revabanking.accounts " +
+                         "WHERE revabanking.accounts = ? ";
+
+            conn.prepareStatement(sql).execute();
+
+
+        }catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+
+    }
+
     //TODO need to implement a balance retrieval method
-    //TODO need to implement a method that withdraw and deposit
+    //TODO need to implement a method that withdraws and a method to deposit
 }

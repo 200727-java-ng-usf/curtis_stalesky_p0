@@ -11,6 +11,8 @@ public class AppUsers {
     private String userName;
     private String password;
     private String email;
+    private double accountBalance;
+    private int accountNumber;
     private Roles role;
 
 
@@ -42,11 +44,12 @@ public class AppUsers {
         this.email = email;
 
     }
-
-    // Empty Constructor
-    public AppUsers(){
-        super();
+    public AppUsers(double accountBalance) {
+        this.accountBalance = accountBalance;
     }
+    public AppUsers(int accountNumber){ this.accountNumber = accountNumber; }
+    // Empty Constructor
+    public AppUsers(){super();}
 
     public Integer getId() {
         return id;
@@ -103,6 +106,14 @@ public class AppUsers {
     public void setRole(Roles role) {
         this.role = role;
     }
+
+    public double getAccountBalance(double accountBalance) { return accountBalance;}
+
+    public void setAccountBalance(double accountBalance) {this.accountBalance = accountBalance;}
+
+    public int getAccountNumber() {return accountNumber;}
+
+    public void setAccountNumber() {this.accountNumber = accountNumber;}
 
     @Override
     public boolean equals(Object o) {

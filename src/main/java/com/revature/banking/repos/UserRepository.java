@@ -18,9 +18,9 @@ import java.util.Set;
 
 public class UserRepository {
 
-    private int accountNumber; // will store a temporary account number that will be used to create an
-                               // account number for new customer in the
-    // TODO update the base query string for revabanking app.
+    private int accountNumber = 1000; // will store a temporary account number that will be used to create an
+                               // account number for new customer in the accounts table
+    // TODO update the base query string for revabanking app. or remove
     private String baseQuery = "SELECT * FROM revabooks.app_users au " +
             "                   JOIN revabooks.user_roles ur " +
             "                   ON au.role_id = ur.id ";
@@ -37,14 +37,13 @@ public class UserRepository {
 
         Optional<AppUsers> _user = Optional.empty();
 
-        // This is a try with resources, will close connection when try block is done due to autoclose
+        // This is a try with resources, will close connection when try block is done due to autoclose()
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 
-            // TODO change sql string to access revabanking
-            String sql = "SELECT * FROM revabooks.app_users au " +
-                    "JOIN revabooks.user_roles ur " +
-                    "ON au.role_id = ur.id " +
-                    "WHERE username = ? AND password = ?"; // pre loaded into prep statement
+            // TODO change sql string to access revabanking -- Completed
+            String sql = "SELECT * FROM revabanking.customers WHERE customers.user_name = ? " +
+                         "AND customers.user_password = ? ";
+
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,username);
             pstmt.setString(2,password);
@@ -65,7 +64,7 @@ public class UserRepository {
 
         try(Connection  conn = ConnectionFactory.getInstance().getConnection()){
 
-            String sql = "SELECT * FROM revabanking.Customers WHERE username = ?";
+            String sql = "SELECT * FROM revabanking.customers WHERE username = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
 
@@ -88,18 +87,24 @@ public class UserRepository {
         if (!newUser.getUserName().isEmpty()){
             try(Connection  conn = ConnectionFactory.getInstance().getConnection()){
 
+                // This part will insert new user information into the accounts table
+                String sql = "INSERT INTO revabanking.customers (first_name, last_name, " +
+                        "user_name, user_password, email)" +
+                        "VALUES (?, ?, ?, ?, ?);" +
+                        "INSERT INTO revabanking.customers";
 
-                String sql = "INSERT INTO revabanking.customers (username, password, first_name, last_name, email, role_id) " +
-                        "VALUES (?, ?, ?, ?, ?, ?)";
+                /*String sql = "INSERT INTO revabanking.customers (username, password, " +
+                             "first_name, last_name, email, role_id) " +
+                             "VALUES (?, ?, ?, ?, ?, ?)";*/ // reference string,
 
                 // second parameter here is used to indicate column names that will have generated values
                 PreparedStatement pstmt = conn.prepareStatement(sql, new String[] {"id"});
-                pstmt.setString(1, newUser.getUserName());
-                pstmt.setString(2, newUser.getPassword());
-                pstmt.setString(3, newUser.getFirstName());
-                pstmt.setString(4, newUser.getLastName());
+                pstmt.setString(1, newUser.getFirstName());
+                pstmt.setString(2, newUser.getLastName());
+                pstmt.setString(3, newUser.getUserName());
+                pstmt.setString(4, newUser.getPassword());
                 pstmt.setString(5, newUser.getEmail());
-                pstmt.setInt(6, newUser.getRole().ordinal() +1);
+                //pstmt.setInt(6, newUser.getRole().ordinal() +  4);
 
                 int rowsInserted = pstmt.executeUpdate();
 
@@ -110,28 +115,61 @@ public class UserRepository {
                         newUser.setId(rs.getInt(1));
                     }
                 }
-
             }catch (SQLException sqle) {
                 sqle.printStackTrace();
             }
+        }else {
+            System.err.println("User already exits");
+        }
+        // This part will insert new user information into the accounts table
+        accountNumber = ++accountNumber;
+        if (!newUser.getUserName().isEmpty()){
+            try(Connection  conn = ConnectionFactory.getInstance().getConnection()){
 
+                // need to fix sql string to input into accounts table and accounts table. 2
+                String sql = "INSERT INTO revabanking.accounts ("+ accountNumber +" ac_firstname, ac_lastname, " +
+                        "balance)" +
+                        "VALUES (?, ?, ?, ?);" +
+                        "INSERT INTO revabanking.accounts";
+
+                // second parameter here is used to indicate column names that will have generated values
+                PreparedStatement pstmt = conn.prepareStatement(sql, new String[] {"id"});
+                pstmt.setInt(1, accountNumber);
+                pstmt.setString(2, newUser.getFirstName());
+                pstmt.setString(3, newUser.getLastName());
+                pstmt.setDouble(4, newUser.getAccountBalance(0.00));
+
+                int rowsInserted = pstmt.executeUpdate();
+
+                if (rowsInserted != 0){
+                    ResultSet rs = pstmt.getGeneratedKeys();
+
+                    while (rs.next()){
+                        newUser.setId(rs.getInt(1));
+                    }
+                }
+            }catch (SQLException sqle) {
+                sqle.printStackTrace();
+            }
         }else {
             System.err.println("User already exits");
         }
 
+
     }
 
+    //TODO need to alter mapResultSet to include account information?
     private Set<AppUsers> mapResultSet(ResultSet rs)throws SQLException{
 
         Set<AppUsers> users = new HashSet<>();
         while (rs.next()){
             AppUsers temp = new AppUsers();
-            temp.setId(rs.getInt("id"));
+            temp.setId(rs.getInt("customer_id"));
             temp.setFirstName(rs.getString("first_name"));
-            temp.setFirstName(rs.getString("last_name"));
-            temp.setFirstName(rs.getString("username"));
-            temp.setFirstName(rs.getString("password"));
-            temp.setRole(Roles.getByName(rs.getString("name")));
+            temp.setLastName(rs.getString("last_name"));
+            temp.setUserName(rs.getString("user_name")); // previous field username
+            temp.setPassword(rs.getString("user_password")); // previous field password
+            // temp.setRole(Roles.getByName(rs.getString("name")));
             System.out.println(temp);
             users.add(temp);
         }

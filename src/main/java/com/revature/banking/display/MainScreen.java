@@ -21,25 +21,26 @@ public class MainScreen extends Screen{
         System.out.println("3) Exit Application");
 
         try {
-            System.out.println("> ");
+            System.out.print(">  ");
             String userSelection = app.getConsole().readLine();
 
             switch (userSelection) {
                 case "1":
-                    app.getRouter().navigate("/login"); //TODO implement the app function
+                    app.getRouter().navigate("/login"); //TODO implement the app function -- Completed
                     break;
                 case "2":
-                    app.getRouter().navigate("/register");
+                    app.getRouter().navigate("/register"); // TODO test register function
                     break;
                 case "3":
                     app.setAppRunning(false);
                     break;
                 default:
-                    System.out.println("[LOG] - Invalid selection!");
+                    System.out.println("Invalid selection!");
             }
 
         }catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            System.out.println("Something went wrong while trying to log in");
         }
     }
 }

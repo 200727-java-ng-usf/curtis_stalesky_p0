@@ -10,9 +10,9 @@ public class AppDriver {
 
         // while loop that will keep printing out
         while(app.isAppRunning()){
-            System.out.println("beginning of while loop");
-            app.getRouter().navigate("/main");
-            System.out.println("end of while loop");
+            //System.out.println("beginning of while loop");
+            app.getRouter().navigate("/main"); // First screen to pop-up
+            //System.out.println("end of while loop");
         }
 
     }

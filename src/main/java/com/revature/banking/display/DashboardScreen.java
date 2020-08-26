@@ -16,12 +16,14 @@ public class DashboardScreen extends Screen{
     }
     @Override
     public void render() {
+        String firstName = app.getCurrentUser().getFirstName();
+        String lastName = app.getCurrentUser().getLastName();
 
         // this while loop will keep the dashboard screen open
         while (app.isSessionValid()) {
 
 
-            System.out.println("Welcome to your Dashboard!" + app.getCurrentUser());
+            System.out.println("Welcome to your Dashboard! " + firstName + " " + lastName);
             // TODO will need to create a method to view account in userServices
             System.out.println("1) View your Account");
             // TODO will need to create a method for the user to withdraw money, can't withdraw with 0 balance
@@ -40,21 +42,21 @@ public class DashboardScreen extends Screen{
                     case "1": // View account info
                     {
                         // TODO use this block to view their account
-
+                        System.out.println("Function not yet implemented");
 
                     }
                         break;
                     case "2": // Make a withdraw
                     {
                         // TODO use this block to make a withdraw
-
+                        System.out.println("Function not yet implemented");
                     }
 
                         break;
                     case "3": // Make a deposit
                     {
                         // TODO use this block to make a deposit
-
+                        System.out.println("Function not yet implemented");
                     }
                         break;
                     case "4":
