@@ -7,6 +7,7 @@ import com.revature.banking.models.Roles;
 import com.revature.banking.util.ConnectionFactory;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class UserServices {
 
     // Instantiates this class
     public UserServices(UserRepository repo){
-        System.out.println("[LOG] - Instantiating " + this.getClass().getName());
+        //System.out.println("[LOG] - Instantiating " + this.getClass().getName());
         userRepo = repo;
 
     }
@@ -103,8 +104,8 @@ public class UserServices {
         return true;
     }
 
-    // Method to
-    public void viewAccount(){
+    // Method to view account balance
+    public void viewAccount(String username){
 
         app.getCurrentUser();
 
@@ -112,6 +113,9 @@ public class UserServices {
 
             String sql = "SELECT * FROM revabanking.accounts " +
                          "WHERE revabanking.accounts = ? ";
+
+            PreparedStatement pstm = conn.prepareStatement(sql);
+                pstm.setString(1, username);
 
             conn.prepareStatement(sql).execute();
 
@@ -122,6 +126,9 @@ public class UserServices {
 
     }
 
-    //TODO need to implement a balance retrieval method
+    public void makeWithdraw(){}
+
+    public void makeDeposit(){}
+
     //TODO need to implement a method that withdraws and a method to deposit
 }

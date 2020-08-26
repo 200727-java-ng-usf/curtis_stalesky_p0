@@ -16,7 +16,7 @@ public class AppState {
     private boolean appRunning;
 
     public AppState (){
-        System.out.println("[LOC] - Initializing application");
+        //System.out.println("[LOC] - Initializing application");
 
         appRunning = true;
         console = new BufferedReader(new InputStreamReader(System.in));
@@ -32,7 +32,7 @@ public class AppState {
                 .addScreen(new LoginScreen(userService))
                 .addScreen(new DashboardScreen());
 
-        System.out.println("[LOG] - Application initialization complete");
+        //System.out.println("[LOG] - Application initialization complete");
 
     }
 

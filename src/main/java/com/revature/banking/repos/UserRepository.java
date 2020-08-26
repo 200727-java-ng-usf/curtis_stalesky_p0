@@ -29,7 +29,7 @@ public class UserRepository {
     // TODO replace mock implementation with in-memory persistence -Done
 
     public UserRepository() {
-        System.out.println("[LOG] - Instantiating " + this.getClass().getName());
+        //System.out.println("[LOG] - Instantiating " + this.getClass().getName());
     }
 
     /* Method that finds users by their username and password */
@@ -123,7 +123,10 @@ public class UserRepository {
         }
         // This part will insert new user information into the accounts table
         accountNumber = ++accountNumber;
-        if (!newUser.getUserName().isEmpty()){
+        // Using same code that is used to save new users to also insert data into a
+        // database, could be broken atm
+        // may need to look into using a trigger to insert values into accounts table instead
+       /* if (!newUser.getUserName().isEmpty()){
             try(Connection  conn = ConnectionFactory.getInstance().getConnection()){
 
                 // need to fix sql string to input into accounts table and accounts table. 2
@@ -153,7 +156,7 @@ public class UserRepository {
             }
         }else {
             System.err.println("User already exits");
-        }
+        }*/
 
 
     }

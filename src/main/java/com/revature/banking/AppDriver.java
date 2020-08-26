@@ -8,7 +8,7 @@ public class AppDriver {
 
     public static void main(String[] args) {
 
-        // while loop that will keep printing out
+        // while loop that will keep printing out main screen
         while(app.isAppRunning()){
             //System.out.println("beginning of while loop");
             app.getRouter().navigate("/main"); // First screen to pop-up
